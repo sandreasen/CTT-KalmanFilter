@@ -29,6 +29,50 @@ data <- node[,c(2:3)]
 here <- node$Here
 
 # =====================================================
+# Raw Data plot
+# =====================================================
+
+raw <- node[,c("date", "node1", "Here")]
+raw$date <- as.POSIXct(raw$date, format="%Y-%m-%d %H:%M:%S")
+raw <- raw[raw$date > "2016-11-24 08:00:00",]
+raw <- raw[raw$date < "2016-12-01 08:00:00",]
+rownames(raw) <- c(1:nrow(raw))
+
+par(mar = c(5,5,2,5))
+with(raw, plot(raw$node1,
+               type = "l",
+               lty = 1,
+               lwd = 2,
+               xaxt = "n",
+               ylab = "CO2",
+               xlab = " "))
+par(new = T)
+
+with(raw, plot(raw$Here,
+               type = "l",
+               lty = 1,
+               lwd = 2,
+               ylab=NA,
+               xaxt = "n",
+               yaxt = "n",
+               xlab = " ",
+               col = "red",
+               ylim = c(0,10)))
+
+axis(side = 4)
+mtext(side = 4, line = 3, 'Jam-Factor')
+legend("topleft",
+       legend=c("CO2", "Jam-Factor"),
+       lty=c(1,1),
+       pch=c(NA, NA),
+       col=c("black", "red"),
+       lwd = c(2,2))
+
+axis(side = 1, at = seq(1,283, length = 8),
+     label = format(unique(as.Date(raw$date)), format="%d-%m"))
+
+
+# =====================================================
 # Initialization
 # =====================================================
 
